@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_vertical_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".view.FilterActivity">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_id"
+            style="@style/AppTheme.EditText"
+            android:hint="@string/id"
+            android:imeOptions="actionNext"
+            android:inputType="number" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_first_name"
+            style="@style/AppTheme.EditText"
+            android:hint="@string/first_name"
+            android:imeOptions="actionNext" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_last_name"
+            style="@style/AppTheme.EditText"
+            android:hint="@string/last_name"
+            android:imeOptions="actionNext" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_address"
+            style="@style/AppTheme.EditText"
+            android:hint="@string/address"
+            android:imeOptions="actionDone"
+            android:inputType="textMultiLine"
+            android:lines="3" />
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_search"
+        style="@style/AppTheme.MyButtons"
+        android:layout_marginTop="@dimen/min_padding_margin"
+        android:layout_gravity="center"
+        android:text="@string/search" />
+
+</LinearLayout>

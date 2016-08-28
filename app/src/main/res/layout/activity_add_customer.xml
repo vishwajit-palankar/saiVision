@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_vertical_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".view.AddCustomerActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:scrollbars="none"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_first_name"
+                    style="@style/AppTheme.EditText"
+                    android:hint="@string/first_name"
+                    android:imeOptions="actionNext" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_last_name"
+                    style="@style/AppTheme.EditText"
+                    android:hint="@string/last_name"
+                    android:imeOptions="actionNext" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_phone_number"
+                    style="@style/AppTheme.EditText"
+                    android:hint="@string/phone_number"
+                    android:imeOptions="actionNext"
+                    android:inputType="number" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_email"
+                    style="@style/AppTheme.EditText"
+                    android:hint="@string/email"
+                    android:imeOptions="actionNext"
+                    android:inputType="textEmailAddress" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_registration_amount"
+                    style="@style/AppTheme.EditText"
+                    android:hint="@string/registration_amount"
+                    android:imeOptions="actionNext"
+                    android:inputType="numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/min_padding_margin"
+                android:layout_marginTop="@dimen/min_padding_margin"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                style="@style/AppTheme.TextView"
+                android:layout_marginBottom="@dimen/min_padding_margin"
+                android:layout_marginTop="@dimen/min_padding_margin"
+                android:text="@string/address"
+                android:textSize="20sp" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_apt_name"
+                    style="@style/AppTheme.EditText"
+                    android:hint="@string/apartment_name"
+                    android:imeOptions="actionNext" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_address_lane1"
+                    style="@style/AppTheme.EditText"
+                    android:hint="@string/address_lane_1"
+                    android:imeOptions="actionNext" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_address_lane2"
+                    style="@style/AppTheme.EditText"
+                    android:hint="@string/address_lane_2"
+                    android:imeOptions="actionNext" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_city"
+                    style="@style/AppTheme.EditText"
+                    android:hint="@string/city"
+                    android:imeOptions="actionNext" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_pincode"
+                    style="@style/AppTheme.EditText"
+                    android:hint="@string/pin_code"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:imeOptions="actionDone" />
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
+                android:id="@+id/btn_submit"
+                style="@style/AppTheme.MyButtons"
+                android:layout_gravity="center"
+                android:text="@string/submit" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Sai Vision</string>
+    <string name="user_name">User Name</string>
+    <string name="alpha_numeric">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="first_name">First Name</string>
+    <string name="id">ID</string>
+    <string name="last_name">Last Name</string>
+    <string name="search">Search</string>
+    <string name="no_user_found">No user Found\nGo Back and change the filter</string>
+    <string name="amount">Amount</string>
+    <string name="pay">Pay</string>
+    <string name="address">Address</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="email">Email</string>
+    <string name="apartment_name">Apartment Name</string>
+    <string name="address_lane_1">Address Lane 1</string>
+    <string name="address_lane_2">Address Lane 2</string>
+    <string name="registration_amount">Registration Amount</string>
+    <string name="city">City</string>
+    <string name="pin_code">Pin Code</string>
+    <string name="submit">Submit</string>
+</resources>

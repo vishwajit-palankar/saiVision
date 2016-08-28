@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_vertical_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.saivision.collection.view.UserDetailsActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+        <EditText
+            android:id="@+id/et_amount"
+            style="@style/AppTheme.EditText"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/min_padding_margin"
+            android:layout_toLeftOf="@+id/btn_pay"
+            android:hint="@string/amount"
+            android:inputType="numberDecimal" />
+
+        <Button
+            android:id="@+id/btn_pay"
+            style="@style/AppTheme.MyButtons"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:text="@string/pay" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_name"
+        style="@style/AppTheme.TextView"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        tools:text="Vishwajit Palankar" />
+
+    <TextView
+        android:id="@+id/tv_address"
+        style="@style/AppTheme.TextView"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        tools:text="106 akashdeep, khadki, Pune 411003" />
+
+    <TextView
+        android:id="@+id/tv_last_payment_date"
+        style="@style/AppTheme.TextView"
+        tools:text="26/08/2016" />
+
+
+</LinearLayout>
