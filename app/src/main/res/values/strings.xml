@@ -21,4 +21,7 @@
     <string name="city">City</string>
     <string name="pin_code">Pin Code</string>
     <string name="submit">Submit</string>
+    <string name="empty_field">This Field Cannot be empty</string>
+    <string name="oops">Oops…</string>
+    <string name="something_went_wrong">Something went wrong!</string>
 </resources>
