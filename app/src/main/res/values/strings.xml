@@ -24,4 +24,10 @@
     <string name="empty_field">This Field Cannot be empty</string>
     <string name="oops">Oops…</string>
     <string name="something_went_wrong">Something went wrong!</string>
+    <string name="userName">user_name</string>
+    <string name="invalid_credentials">Invalid user name or password</string>
+    <string name="warning">Warning!!!</string>
+    <string name="all_fields_empty">Give at least one input for filter</string>
+    <string name="no_users_found">No Users found with your query</string>
+    <string name="customer_listing">Customer Listing</string>
 </resources>

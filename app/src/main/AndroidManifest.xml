@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.saivision.collection">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".SaiVisionApplication"
         android:allowBackup="true"

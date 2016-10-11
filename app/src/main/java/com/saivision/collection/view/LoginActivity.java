@@ -1,6 +1,7 @@
 package com.saivision.collection.view;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.saivision.collection.R;
 import com.saivision.collection.SaiVisionApplication;
+import com.saivision.collection.utils.PrefsManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +31,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText etPassword;
     private TextInputLayout tilUserName;
     private TextInputLayout tilPassword;
+    private String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         Button btnLogin = (Button) findViewById(R.id.btn_login);
         btnLogin.setOnClickListener(this);
+
+
+        String userName = PrefsManager.getStringPref(getString(R.string.userName));
+
+        if (userName != null && !userName.isEmpty()) {
+            startActivity(new Intent(this, FilterActivity.class));
+            finish();
+        }
     }
 
     @Override
@@ -63,12 +74,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void login() {
         try {
 
+            userName = etUserName.getText().toString().trim();
+
             final ProgressDialog dialog = ProgressDialog.show(this, "",
                     "Loading. Please wait...", true);
             dialog.setCancelable(false);
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("username", etUserName.getText().toString().trim());
+            jsonObject.put("username", userName);
             jsonObject.put("password", etPassword.getText().toString().trim());
             JSONArray requestParameter = new JSONArray();
             requestParameter.put(jsonObject);
@@ -100,7 +113,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void parseLoginData(JSONObject response) {
-
+        try {
+            String status = response.getString("success");
+            if (status.equalsIgnoreCase("true")) {
+                PrefsManager.setPref(getString(R.string.userName), userName);
+                startActivity(new Intent(this, FilterActivity.class));
+                finish();
+            } else {
+                new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText(getString(R.string.oops))
+                        .setContentText(getString(R.string.invalid_credentials))
+                        .show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean isValid() {

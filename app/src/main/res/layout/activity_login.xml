@@ -19,7 +19,6 @@
         <EditText
             android:id="@+id/et_username"
             style="@style/AppTheme.EditText"
-            android:digits="@string/alpha_numeric"
             android:hint="@string/user_name" />
     </android.support.design.widget.TextInputLayout>
 
