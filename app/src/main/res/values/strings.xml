@@ -30,4 +30,8 @@
     <string name="all_fields_empty">Give at least one input for filter</string>
     <string name="no_users_found">No Users found with your query</string>
     <string name="customer_listing">Customer Listing</string>
+    <string name="add_customer">Add Customer</string>
+    <string name="cheque_number">Cheque Number</string>
+    <string name="cheque">Cheque</string>
+    <string name="cash">Cash</string>
 </resources>
