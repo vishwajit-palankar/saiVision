@@ -1,6 +1,7 @@
 package com.saivision.collection.view;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -19,6 +20,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.saivision.collection.R;
 import com.saivision.collection.SaiVisionApplication;
 import com.saivision.collection.model.CustomerPOJO;
+import com.saivision.collection.utils.Utility;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -71,7 +73,7 @@ public class UserDetailsActivity extends AppCompatActivity implements RadioGroup
         tvLastPaymentDate.setText(customerInfo.getPaymentDate());
 
         TextView tvBoxNo = (TextView) findViewById(R.id.tv_box_no);
-        tvBoxNo.setText(customerInfo.getBoxNo());
+        tvBoxNo.setText(String.format("Box No. %s", customerInfo.getBoxNo()));
 
         rgPaymentMode = (RadioGroup) findViewById(R.id.rg_payment_mode);
         rgPaymentMode.setOnCheckedChangeListener(this);
@@ -107,8 +109,16 @@ public class UserDetailsActivity extends AppCompatActivity implements RadioGroup
 
     @Override
     public void onClick(View v) {
-        if (validateFields())
-            doPayment();
+        if (validateFields()) {
+            if (Utility.isConnectedToInternet(this))
+                doPayment();
+            else {
+                new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText(getString(R.string.no_connection))
+                        .setContentText(getString(R.string.check_internet_connection))
+                        .show();
+            }
+        }
 
     }
 
@@ -120,6 +130,7 @@ public class UserDetailsActivity extends AppCompatActivity implements RadioGroup
         if (mode.equals("Cheque")) {
             if (mETChequeNumber.getText().toString().isEmpty()) {
                 mETChequeNumber.setError(getString(R.string.empty_field));
+                mETChequeNumber.requestFocus();
                 return false;
             }
         }
@@ -133,7 +144,7 @@ public class UserDetailsActivity extends AppCompatActivity implements RadioGroup
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("id", customerInfo.getBoxNo());
-            jsonObject.put("amount", mETPaymentAmount.getText().toString());
+            jsonObject.put("amount", amount);
             jsonObject.put("mode", mode);
 
             if (mode.equals("Cheque")) {
@@ -147,6 +158,8 @@ public class UserDetailsActivity extends AppCompatActivity implements RadioGroup
             dialog.setCancelable(false);
             requestParameter.put(jsonObject);
             String url = String.format(getString(R.string.service_payment), requestParameter.toString());
+
+            Log.e(TAG, url);
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
                 @Override
@@ -174,6 +187,30 @@ public class UserDetailsActivity extends AppCompatActivity implements RadioGroup
     }
 
     private void parsePaymentData(JSONObject response) {
-
+        try {
+            String status = response.getString("success");
+            if (status.equalsIgnoreCase("True")) {
+                new SweetAlertDialog(UserDetailsActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText(getString(R.string.success))
+                        .setContentText("Payment Received Successfully!!!")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                Intent intent = new Intent(UserDetailsActivity.this, FilterActivity.class);
+//Clear all activities and start new task
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
+            } else {
+                new SweetAlertDialog(UserDetailsActivity.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText(getString(R.string.oops))
+                        .setContentText(getString(R.string.something_went_wrong))
+                        .show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

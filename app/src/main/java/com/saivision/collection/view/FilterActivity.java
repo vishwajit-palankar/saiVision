@@ -21,6 +21,7 @@ import com.saivision.collection.R;
 import com.saivision.collection.SaiVisionApplication;
 import com.saivision.collection.model.CustomerPOJO;
 import com.saivision.collection.utils.PrefsManager;
+import com.saivision.collection.utils.Utility;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,7 +61,14 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if (validateViews()) {
-            callFilterApi();
+            if (Utility.isConnectedToInternet(this))
+                callFilterApi();
+            else {
+                new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText(getString(R.string.no_connection))
+                        .setContentText(getString(R.string.check_internet_connection))
+                        .show();
+            }
         } else {
 
             new SweetAlertDialog(FilterActivity.this, SweetAlertDialog.WARNING_TYPE)
