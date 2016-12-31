@@ -42,7 +42,7 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.View
         CustomerPOJO customer = customersList.get(position);
         holder.tvName.setText(customer.getFname() + " " + customer.getLname());
 //        holder.tvAddress.setText(customer.get);
-        holder.tvRemaining.setText(String.format("Rs. %s", customer.getPhoneNumber()));
+        holder.tvRemaining.setText(String.format("Rs. %s", customer.getRemainingAmount()));
         holder.tvLastPaymentDate.setText(customer.getPaymentDate());
         holder.tvMobile.setText(customer.getPhoneNumber());
     }
@@ -67,6 +67,14 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.View
             tvMobile = (TextView) itemView.findViewById(R.id.tv_number);
             tvRemaining = (TextView) itemView.findViewById(R.id.tv_remaining);
             tvLastPaymentDate = (TextView) itemView.findViewById(R.id.tv_last_payment_date);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    listener.onCustomerClicked(getAdapterPosition());
+                }
+            });
         }
     }
 

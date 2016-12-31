@@ -2,4 +2,7 @@
 <resources>
     <string name="service_login">http://www.freemindsoftware.com/cable/User/validateUser?user_data=%1$s</string>
     <string name="service_filter">http://www.freemindsoftware.com/cable/Customer/filterCustomer?customer_data=%1$s</string>
+    <string name="service_payment">http://www.freemindsoftware.com/cable/Customer/customerPaymentAPI?customer_payment_data=%1$s</string>
+    <string name="service_get_group">http://www.freemindsoftware.com/cable/Cable/getGroup</string>
+    <string name="service_add_customer">http://www.freemindsoftware.com/cable/Customer/registerCustomerAPI?customer_data=%1$s</string>
 </resources>

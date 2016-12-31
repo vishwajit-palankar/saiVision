@@ -26,9 +26,12 @@ public class CustomerPOJO implements Parcelable {
     @SerializedName("remaining_amount")
     @Expose
     private String remainingAmount;
-    @SerializedName("payment_date")
+    @SerializedName("end_date")
     @Expose
     private String paymentDate;
+    @SerializedName("box_no")
+    @Expose
+    private String boxNo;
 
     /**
      *
@@ -138,6 +141,17 @@ public class CustomerPOJO implements Parcelable {
         this.paymentDate = paymentDate;
     }
 
+    public String getBoxNo() {
+        return boxNo;
+    }
+
+    public void setBoxNo(String boxNo) {
+        this.boxNo = boxNo;
+    }
+
+    public CustomerPOJO() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -151,9 +165,7 @@ public class CustomerPOJO implements Parcelable {
         dest.writeString(this.phoneNumber);
         dest.writeString(this.remainingAmount);
         dest.writeString(this.paymentDate);
-    }
-
-    public CustomerPOJO() {
+        dest.writeString(this.boxNo);
     }
 
     protected CustomerPOJO(Parcel in) {
@@ -163,9 +175,10 @@ public class CustomerPOJO implements Parcelable {
         this.phoneNumber = in.readString();
         this.remainingAmount = in.readString();
         this.paymentDate = in.readString();
+        this.boxNo = in.readString();
     }
 
-    public static final Parcelable.Creator<CustomerPOJO> CREATOR = new Parcelable.Creator<CustomerPOJO>() {
+    public static final Creator<CustomerPOJO> CREATOR = new Creator<CustomerPOJO>() {
         @Override
         public CustomerPOJO createFromParcel(Parcel source) {
             return new CustomerPOJO(source);

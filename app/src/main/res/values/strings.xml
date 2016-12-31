@@ -30,4 +30,16 @@
     <string name="all_fields_empty">Give at least one input for filter</string>
     <string name="no_users_found">No Users found with your query</string>
     <string name="customer_listing">Customer Listing</string>
+    <string name="add_customer">Add Customer</string>
+    <string name="cheque_number">Cheque Number</string>
+    <string name="cheque">Cheque</string>
+    <string name="cash">Cash</string>
+    <string name="success">Success</string>
+    <string name="invalid_mobile">Please enter a valid mobile number</string>
+    <string name="invalid_email">Please give a valid email address</string>
+    <string name="select_group">Please select a Group</string>
+    <string name="select_gender">Please select a Gender</string>
+    <string name="no_connection">No Connection</string>
+    <string name="check_internet_connection">Kindly Check your internet connection and try again.</string>
+    <string name="box_no">Box No</string>
 </resources>

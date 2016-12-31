@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +20,8 @@ import com.google.gson.Gson;
 import com.saivision.collection.R;
 import com.saivision.collection.SaiVisionApplication;
 import com.saivision.collection.model.CustomerPOJO;
+import com.saivision.collection.utils.PrefsManager;
+import com.saivision.collection.utils.Utility;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,7 +61,14 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if (validateViews()) {
-            callFilterApi();
+            if (Utility.isConnectedToInternet(this))
+                callFilterApi();
+            else {
+                new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText(getString(R.string.no_connection))
+                        .setContentText(getString(R.string.check_internet_connection))
+                        .show();
+            }
         } else {
 
             new SweetAlertDialog(FilterActivity.this, SweetAlertDialog.WARNING_TYPE)
@@ -146,5 +158,27 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
     private boolean validateViews() {
         return !mETId.getText().toString().trim().isEmpty() || !mETFirstName.getText().toString().trim().isEmpty() || !mETLastname.getText().toString().trim().isEmpty() || !mETAddress.getText().toString().trim().isEmpty();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_add:
+                startActivity(new Intent(this, AddCustomerActivity.class));
+                return true;
+            case R.id.menu_logout:
+                PrefsManager.invalidatePrefs();
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

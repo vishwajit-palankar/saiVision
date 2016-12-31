@@ -17,6 +17,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.saivision.collection.R;
 import com.saivision.collection.SaiVisionApplication;
 import com.saivision.collection.utils.PrefsManager;
+import com.saivision.collection.utils.Utility;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,7 +66,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.btn_login:
                 if (isValid()) {
-                    login();
+                    if (Utility.isConnectedToInternet(this))
+                        login();
+                    else {
+                        new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.WARNING_TYPE)
+                                .setTitleText(getString(R.string.no_connection))
+                                .setContentText(getString(R.string.check_internet_connection))
+                                .show();
+                    }
                 }
                 break;
         }
@@ -86,6 +94,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             JSONArray requestParameter = new JSONArray();
             requestParameter.put(jsonObject);
             String url = String.format(getString(R.string.service_login), requestParameter.toString());
+
+            Log.d(TAG, url);
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
                 @Override
