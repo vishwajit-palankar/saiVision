@@ -35,6 +35,7 @@
         <activity
             android:name=".view.AddCustomerActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".view.FeedbackActivity"></activity>
     </application>
 
 </manifest>

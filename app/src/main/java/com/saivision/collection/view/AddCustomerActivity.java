@@ -20,6 +20,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 import com.saivision.collection.R;
 import com.saivision.collection.SaiVisionApplication;
+import com.saivision.collection.database.NewCustomer;
 import com.saivision.collection.model.GroupPOJO;
 import com.saivision.collection.utils.Utility;
 
@@ -30,6 +31,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import io.realm.Realm;
 
 public class AddCustomerActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
@@ -191,9 +193,30 @@ public class AddCustomerActivity extends AppCompatActivity implements AdapterVie
                             .setTitleText(getString(R.string.no_connection))
                             .setContentText(getString(R.string.check_internet_connection))
                             .show();
+                    StoreInDatabase();
                 }
             }
         }
+    }
+
+    private void StoreInDatabase() {
+        Realm.init(this);
+        Realm realm = Realm.getDefaultInstance();
+        NewCustomer newCustomer=realm.createObject(NewCustomer.class);
+        newCustomer.setBoxNo(mETBoxNo.getText().toString().trim());
+        newCustomer.setFirstName(mETFirstName.getText().toString().trim());
+        newCustomer.setLastName(mETLastName.getText().toString().trim());
+        newCustomer.setEmail(mETEmail.getText().toString().trim());
+        newCustomer.setPhone(mETPhoneNumber.getText().toString().trim());
+        newCustomer.setGender(gender);
+        newCustomer.setApartmentName(mETAppartmentName.getText().toString().trim());
+        newCustomer.setAddressLane1(mETLane1.getText().toString().trim());
+        newCustomer.setAddressLane2(mETLane2.getText().toString().trim());
+        newCustomer.setGroup(selectedGroup);
+        newCustomer.setRegistrationAmount(mETRegistrationAmount.getText().toString().trim());
+        newCustomer.setBoxNo(mETBoxNo.getText().toString().trim());
+        realm.commitTransaction();
+        realm.close();
     }
 
     private void addCustomer() {

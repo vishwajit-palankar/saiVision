@@ -19,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.saivision.collection.R;
 import com.saivision.collection.SaiVisionApplication;
+import com.saivision.collection.database.CustomerPayment;
 import com.saivision.collection.model.CustomerPOJO;
 import com.saivision.collection.utils.Utility;
 
@@ -27,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import io.realm.Realm;
 
 public class UserDetailsActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
 
@@ -117,9 +119,25 @@ public class UserDetailsActivity extends AppCompatActivity implements RadioGroup
                         .setTitleText(getString(R.string.no_connection))
                         .setContentText(getString(R.string.check_internet_connection))
                         .show();
+
+                StoreInDatabase();
             }
         }
 
+    }
+
+    private void StoreInDatabase() {
+        Realm.init(this);
+        Realm realm = Realm.getDefaultInstance();
+        CustomerPayment customerPayment = realm.createObject(CustomerPayment.class);
+        customerPayment.setId(customerInfo.getBoxNo());
+        customerPayment.setAmount(mETPaymentAmount.getText().toString());
+        customerPayment.setMode(mode);
+        if (mode.equals("Cheque")) {
+            customerPayment.setChequeNumber(mETChequeNumber.getText().toString());
+        }
+        realm.commitTransaction();
+        realm.close();
     }
 
     private boolean validateFields() {
