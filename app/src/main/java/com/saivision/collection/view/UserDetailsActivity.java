@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,12 +35,12 @@ import io.realm.Realm;
 public class UserDetailsActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
 
     private static final String TAG = UserDetailsActivity.class.getSimpleName();
-    private CustomerPOJO customerInfo;
     private TextInputEditText mETPaymentAmount;
     String mode = "Cash";
     private RadioGroup rgPaymentMode;
     private TextInputLayout chequeView;
     private TextInputEditText mETChequeNumber;
+    private String mBoxNo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +52,54 @@ public class UserDetailsActivity extends AppCompatActivity implements RadioGroup
 
     private void initViews() {
 
-        customerInfo = getIntent().getParcelableExtra(CustomerPOJO.class.getSimpleName());
+        CustomerPOJO customerInfo = getIntent().getParcelableExtra(CustomerPOJO.class.getSimpleName());
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(String.format("%s %s", customerInfo.getFname(), customerInfo.getLname()));
-
         mETPaymentAmount = (TextInputEditText) findViewById(R.id.et_amount);
-        mETPaymentAmount.setText(customerInfo.getRemainingAmount());
+        TextView tvName = (TextView) findViewById(R.id.tv_name);
+        TextView tvAddress = (TextView) findViewById(R.id.tv_address);
+        TextView tvLastPaymentDate = (TextView) findViewById(R.id.tv_last_payment_date);
+        TextView tvBoxNo = (TextView) findViewById(R.id.tv_box_no);
+        TextInputLayout tilId = (TextInputLayout) findViewById(R.id.til_id);
+
+        if (customerInfo != null) {
+            mBoxNo = customerInfo.getBoxNo();
+            getSupportActionBar().setTitle(String.format("%s %s", customerInfo.getFname(), customerInfo.getLname()));
+
+            mETPaymentAmount.setText(customerInfo.getRemainingAmount());
+
+            tvName.setText(String.format("%s %s", customerInfo.getFname(), customerInfo.getLname()));
+
+//        tvAddress.setText(customerInfo.geta);
+
+            tvLastPaymentDate.setText(customerInfo.getPaymentDate());
+
+            tvBoxNo.setText(String.format("Box No. %s", customerInfo.getBoxNo()));
+        } else {
+            getSupportActionBar().setTitle("Offline Payment");
+
+            tvName.setVisibility(View.GONE);
+            tvLastPaymentDate.setVisibility(View.GONE);
+            tvBoxNo.setVisibility(View.GONE);
+            tvAddress.setVisibility(View.GONE);
+            tilId.setVisibility(View.VISIBLE);
+            tilId.getEditText().addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    mBoxNo = s.toString();
+                }
+            });
+        }
 
         mETChequeNumber = (TextInputEditText) findViewById(R.id.et_cheque);
 
@@ -64,19 +107,6 @@ public class UserDetailsActivity extends AppCompatActivity implements RadioGroup
 
         Button btnPay = (Button) findViewById(R.id.btn_pay);
         btnPay.setOnClickListener(this);
-
-        TextView tvName = (TextView) findViewById(R.id.tv_name);
-        tvName.setText(String.format("%s %s", customerInfo.getFname(), customerInfo.getLname()));
-
-        TextView tvAddress = (TextView) findViewById(R.id.tv_address);
-//        tvAddress.setText(customerInfo.geta);
-
-        TextView tvLastPaymentDate = (TextView) findViewById(R.id.tv_last_payment_date);
-        tvLastPaymentDate.setText(customerInfo.getPaymentDate());
-
-        TextView tvBoxNo = (TextView) findViewById(R.id.tv_box_no);
-        tvBoxNo.setText(String.format("Box No. %s", customerInfo.getBoxNo()));
-
         rgPaymentMode = (RadioGroup) findViewById(R.id.rg_payment_mode);
         rgPaymentMode.setOnCheckedChangeListener(this);
 
@@ -129,8 +159,9 @@ public class UserDetailsActivity extends AppCompatActivity implements RadioGroup
     private void StoreInDatabase() {
         Realm.init(this);
         Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
         CustomerPayment customerPayment = realm.createObject(CustomerPayment.class);
-        customerPayment.setId(customerInfo.getBoxNo());
+        customerPayment.setId(mBoxNo);
         customerPayment.setAmount(mETPaymentAmount.getText().toString());
         customerPayment.setMode(mode);
         if (mode.equals("Cheque")) {
@@ -138,6 +169,17 @@ public class UserDetailsActivity extends AppCompatActivity implements RadioGroup
         }
         realm.commitTransaction();
         realm.close();
+        SweetAlertDialog dialog = new SweetAlertDialog(UserDetailsActivity.this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText(getString(R.string.offline))
+                .setContentText(getString(R.string.added_to_the_database))
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        finish();
+                    }
+                });
+        dialog.setCancelable(false);
+        dialog.show();
     }
 
     private boolean validateFields() {
@@ -161,7 +203,7 @@ public class UserDetailsActivity extends AppCompatActivity implements RadioGroup
             String amount = mETPaymentAmount.getText().toString();
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", customerInfo.getBoxNo());
+            jsonObject.put("id", mBoxNo);
             jsonObject.put("amount", amount);
             jsonObject.put("mode", mode);
 

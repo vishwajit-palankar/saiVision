@@ -43,4 +43,11 @@
     <string name="check_internet_connection">Kindly Check your internet connection and try again.</string>
     <string name="box_no">Box No</string>
     <string name="feedback">Feedback</string>
+    <string name="logout">Logout</string>
+    <string name="well_done">Well done!</string>
+    <string name="sync_data">Sync Data</string>
+    <string name="offline_payment">Offline Payment</string>
+    <string name="please_wait_syncing_all_your_data">Please wait, Syncing all your data…</string>
+    <string name="offline">Offline</string>
+    <string name="added_to_the_database">Data Added to the Database</string>
 </resources>

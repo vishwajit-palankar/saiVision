@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,6 +36,8 @@ public class FeedbackActivity extends AppCompatActivity implements AdapterView.O
     ArrayList<String> serviceProviders = new ArrayList<>();
     private String selectedProvider;
     private TextInputEditText mETFeedback;
+    private Spinner spinner;
+    private TextInputEditText mETBoxNo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +100,7 @@ public class FeedbackActivity extends AppCompatActivity implements AdapterView.O
                 provider.setGroupName(usersArray.getJSONObject(i).getString("fname") + " " + usersArray.getJSONObject(i).getString("lname"));
                 provider.setId(usersArray.getJSONObject(i).getString("id"));
                 serviceProviderdersList.add(provider);
+                serviceProviders.add(usersArray.getJSONObject(i).getString("fname") + " " + usersArray.getJSONObject(i).getString("lname"));
                 setAdapter();
             }
         } catch (JSONException e) {
@@ -105,7 +109,7 @@ public class FeedbackActivity extends AppCompatActivity implements AdapterView.O
     }
 
     private void setAdapter() {
-        Spinner spinner = (Spinner) findViewById(R.id.spinner_service_man);
+        spinner = (Spinner) findViewById(R.id.spinner_service_man);
 
         // Spinner click listener
         spinner.setOnItemSelectedListener(this);
@@ -116,8 +120,9 @@ public class FeedbackActivity extends AppCompatActivity implements AdapterView.O
         groupAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(groupAdapter);
 
-        mETFeedback=(TextInputEditText)findViewById(R.id.et_feedback);
-        Button btnSubmit=(Button) findViewById(R.id.btn_submit);
+        mETFeedback = (TextInputEditText) findViewById(R.id.et_feedback);
+        mETBoxNo = (TextInputEditText) findViewById(R.id.et_box_no);
+        Button btnSubmit = (Button) findViewById(R.id.btn_submit);
         btnSubmit.setOnClickListener(this);
     }
 
@@ -137,8 +142,97 @@ public class FeedbackActivity extends AppCompatActivity implements AdapterView.O
 
     @Override
     public void onClick(View v) {
-        if (v.getId()==R.id.btn_submit){
-
+        if (v.getId() == R.id.btn_submit) {
+            if (validateFields()) {
+                submitFeedback();
+            }
         }
+    }
+
+    private void submitFeedback() {
+        try {
+            final ProgressDialog dialog = ProgressDialog.show(this, "",
+                    "Submitting, Please wait...", true);
+            dialog.setCancelable(false);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("user_id", selectedProvider);
+            jsonObject.put("box_no", mETBoxNo.getText().toString().trim());
+            jsonObject.put("feedback", mETFeedback.getText().toString().trim());
+            JSONArray requestParameter = new JSONArray();
+            requestParameter.put(jsonObject);
+            String url = String.format(getString(R.string.service_feedback), requestParameter.toString());
+
+            Log.d(TAG, url);
+
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    dialog.dismiss();
+                    Log.v(TAG, "feedback response: " + response.toString());
+                    parseFeedbackData(response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    dialog.dismiss();
+                    Log.e(TAG, "feedback Error: " + error.toString());
+                    new SweetAlertDialog(FeedbackActivity.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText(getString(R.string.oops))
+                            .setContentText(getString(R.string.something_went_wrong))
+                            .show();
+                }
+            });
+
+            SaiVisionApplication.getInstance().getRequestQueue().add(request);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void parseFeedbackData(JSONObject response) {
+        try {
+            String status = response.getString("success");
+            if (status.equalsIgnoreCase("true")) {
+                new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText(getString(R.string.well_done))
+                        .setContentText("Feedback Submitted Successfully")
+                        .show();
+
+                spinner.setSelection(0);
+                mETFeedback.setText(null);
+
+            } else {
+                new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText(getString(R.string.oops))
+                        .setContentText(getString(R.string.something_went_wrong))
+                        .show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean validateFields() {
+        if (selectedProvider == null) {
+            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText(getString(R.string.oops))
+                    .setContentText(getString(R.string.select_group))
+                    .show();
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mETBoxNo.getText().toString().trim())) {
+            mETBoxNo.setError(getString(R.string.empty_field));
+            mETBoxNo.requestFocus();
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mETFeedback.getText().toString().trim())) {
+            mETFeedback.setError(getString(R.string.empty_field));
+            mETFeedback.requestFocus();
+            return false;
+        }
+
+        return true;
     }
 }

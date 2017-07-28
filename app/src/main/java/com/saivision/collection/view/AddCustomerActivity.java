@@ -58,12 +58,12 @@ public class AddCustomerActivity extends AppCompatActivity implements AdapterVie
 
         if (Utility.isConnectedToInternet(this))
             getGroups();
-        else {
-            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-                    .setTitleText(getString(R.string.no_connection))
-                    .setContentText(getString(R.string.check_internet_connection))
-                    .show();
-        }
+//        else {
+//            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+//                    .setTitleText(getString(R.string.no_connection))
+//                    .setContentText(getString(R.string.check_internet_connection))
+//                    .show();
+//        }
         initViews();
     }
 
@@ -202,7 +202,8 @@ public class AddCustomerActivity extends AppCompatActivity implements AdapterVie
     private void StoreInDatabase() {
         Realm.init(this);
         Realm realm = Realm.getDefaultInstance();
-        NewCustomer newCustomer=realm.createObject(NewCustomer.class);
+        realm.beginTransaction();
+        NewCustomer newCustomer = realm.createObject(NewCustomer.class);
         newCustomer.setBoxNo(mETBoxNo.getText().toString().trim());
         newCustomer.setFirstName(mETFirstName.getText().toString().trim());
         newCustomer.setLastName(mETLastName.getText().toString().trim());
@@ -217,6 +218,17 @@ public class AddCustomerActivity extends AppCompatActivity implements AdapterVie
         newCustomer.setBoxNo(mETBoxNo.getText().toString().trim());
         realm.commitTransaction();
         realm.close();
+        SweetAlertDialog dialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText(getString(R.string.offline))
+                .setContentText(getString(R.string.added_to_the_database))
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        finish();
+                    }
+                });
+        dialog.setCancelable(false);
+        dialog.show();
     }
 
     private void addCustomer() {
@@ -273,7 +285,7 @@ public class AddCustomerActivity extends AppCompatActivity implements AdapterVie
             String status = response.getString("success");
             if (status.equalsIgnoreCase("true")) {
                 new SweetAlertDialog(AddCustomerActivity.this, SweetAlertDialog.SUCCESS_TYPE)
-                        .setTitleText("Well done!")
+                        .setTitleText(getString(R.string.well_done))
                         .setContentText("Customer Added Successfully.")
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
@@ -336,8 +348,7 @@ public class AddCustomerActivity extends AppCompatActivity implements AdapterVie
             mETRegistrationAmount.requestFocus();
             return false;
         }
-
-        if (selectedGroup == null) {
+        if (Utility.isConnectedToInternet(this) && selectedGroup == null) {
             new SweetAlertDialog(AddCustomerActivity.this, SweetAlertDialog.WARNING_TYPE)
                     .setTitleText(getString(R.string.oops))
                     .setContentText(getString(R.string.select_group))

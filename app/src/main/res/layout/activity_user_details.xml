@@ -34,6 +34,20 @@
     </RadioGroup>
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_box_no"
+            style="@style/AppTheme.EditText"
+            android:hint="@string/id"
+            android:inputType="number"
+            tools:text="111" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

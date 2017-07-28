@@ -35,7 +35,10 @@
         <activity
             android:name=".view.AddCustomerActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".view.FeedbackActivity"></activity>
+        <activity
+            android:name=".view.FeedbackActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".view.SyncDataActivity"></activity>
     </application>
 
 </manifest>

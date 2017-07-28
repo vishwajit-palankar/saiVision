@@ -173,6 +173,21 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.menu_add:
                 startActivity(new Intent(this, AddCustomerActivity.class));
                 return true;
+            case R.id.menu_offline_payment:
+                startActivity(new Intent(this, UserDetailsActivity.class));
+                return true;
+            case R.id.menu_sync:
+                if (Utility.isConnectedToInternet(this))
+                    startActivity(new Intent(this, SyncDataActivity.class));
+                else
+                    new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText(getString(R.string.no_connection))
+                            .setContentText(getString(R.string.check_internet_connection))
+                            .show();
+                return true;
+            case R.id.menu_feedback:
+                startActivity(new Intent(this, FeedbackActivity.class));
+                return true;
             case R.id.menu_logout:
                 PrefsManager.invalidatePrefs();
                 startActivity(new Intent(this, LoginActivity.class));
